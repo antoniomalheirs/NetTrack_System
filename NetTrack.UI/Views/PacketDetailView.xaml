@@ -1,0 +1,68 @@
+<UserControl x:Class="NetTrack.Client.Views.PacketDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:NetTrack.Client.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="800">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>    <!-- TreeView -->
+            <RowDefinition Height="5"/>     <!-- Splitter -->
+            <RowDefinition Height="1*"/>    <!-- HexDump -->
+        </Grid.RowDefinitions>
+
+        <!-- Layer Tree -->
+        <Border Grid.Row="0" Background="{DynamicResource MaterialDesignPaper}" CornerRadius="4" Padding="5">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="PACKET DETAILS" FontWeight="Bold" Foreground="{DynamicResource MaterialDesignBodyLight}" Margin="5"/>
+                <TreeView ItemsSource="{Binding PacketDetails}" 
+                          Background="Transparent" 
+                          BorderThickness="0"
+                          VirtualizingStackPanel.IsVirtualizing="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling"
+                           Style="{DynamicResource MaterialDesignTreeView}">
+                    <TreeView.Resources>
+                         <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                            <Setter Property="IsExpanded" Value="True"/>
+                        </Style>
+                    </TreeView.Resources>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <!-- <materialDesign:PackIcon Kind="{Binding Name, Converter={StaticResource LayerIconConverter}}" Margin="0,0,8,0" Width="16" Height="16" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/> -->
+                                <materialDesign:PackIcon Kind="Layers" Margin="0,0,8,0" Width="16" Height="16" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesignBody}"/>
+                                <TextBlock Text=": " Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                <TextBlock Text="{Binding Value}" Foreground="{DynamicResource MaterialDesignBody}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </DockPanel>
+        </Border>
+
+        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="5" Background="{DynamicResource MaterialDesignDivider}"/>
+
+        <!-- Hex Dump -->
+        <Border Grid.Row="2" Background="{DynamicResource MaterialDesignPaper}" CornerRadius="4" Padding="5">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="BYTES" FontWeight="Bold" Foreground="{DynamicResource MaterialDesignBodyLight}" Margin="5"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBox Text="{Binding HexDump}" 
+                             FontFamily="Consolas" 
+                             IsReadOnly="True" 
+                             Background="Transparent" 
+                             BorderThickness="0" 
+                             Foreground="{DynamicResource MaterialDesignBody}" 
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"/>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>
